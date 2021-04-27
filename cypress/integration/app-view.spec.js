@@ -105,12 +105,12 @@ describe('Burrito Builder Form', () => {
   it('should be able to submit order after inputing a name and at least one ingredient and view new order on page', () => {
     cy.intercept({
       method: 'POST',
-      url: 'http://localhost:3001/api/v1/reservations'
+      url: 'http://localhost:3001/api/v1/orders'
     },
       {
         statusCode: 201,
         body:
-          { 'id': 99, 'name': 'Alex', ingredients: ['beans'] }
+          { id: 5, 'name': 'Alex', ingredients: ['beans'] }
       });
 
     cy.get('section').children('.order').should('have.length', '3');
@@ -125,12 +125,12 @@ describe('Burrito Builder Form', () => {
   it('should not be able to submit order if user doesn\'t enter a name', () => {
     cy.intercept({
       method: 'POST',
-      url: 'http://localhost:3001/api/v1/reservations'
+      url: 'http://localhost:3001/api/v1/orders'
     },
       {
         statusCode: 201,
         body:
-          { 'id': 9, 'name': 'Alex', ingredients: [''] }
+          { id: 5, 'name': 'Alex', ingredients: [''] }
       });
 
     cy.get('section').children('.order').should('have.length', '3');
@@ -145,12 +145,12 @@ describe('Burrito Builder Form', () => {
   it('should not be able to submit order if user doesn\'t click any ingredients', () => {
     cy.intercept({
       method: 'POST',
-      url: 'http://localhost:3001/api/v1/reservations'
+      url: 'http://localhost:3001/api/v1/orders'
     },
       {
         statusCode: 201,
         body:
-          { 'id': 4, 'name': '', ingredients: ['beans'] }
+          { id: 5, 'name': '', ingredients: ['beans'] }
       });
 
     cy.get('section').children('.order').should('have.length', '3');
@@ -165,12 +165,12 @@ describe('Burrito Builder Form', () => {
   it('should not be able to submit order if nothing is inputted', () => {
     cy.intercept({
       method: 'POST',
-      url: 'http://localhost:3001/api/v1/reservations'
+      url: 'http://localhost:3001/api/v1/orders'
     },
       {
         statusCode: 201,
         body:
-          { 'id': 4, 'name': '', ingredients: ['beans'] }
+          { id: 5, 'name': '', ingredients: ['beans'] }
       });
 
     cy.get('section').children('.order').should('have.length', '3');
