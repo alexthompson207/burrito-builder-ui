@@ -16,7 +16,7 @@ class App extends Component {
   componentDidMount() {
     getOrders()
       .then(data => this.setState({ orders: data.orders, error: '' }))
-      .catch(err => console.error('Error fetching:', err))
+      .catch(err => this.setState({ error: 'Oops, something went wrong' }))
   }
 
   render() {
@@ -27,7 +27,7 @@ class App extends Component {
           <OrderForm />
         </header>
 
-        {/* <Orders orders={this.state.orders} /> */}
+        <Orders orders={this.state.orders} />
       </main>
     );
   }
