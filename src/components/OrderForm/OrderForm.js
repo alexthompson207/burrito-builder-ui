@@ -22,6 +22,12 @@ class OrderForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.clearInputs();
+    if (this.state.name && this.state.ingredients.length) {
+      const newOrder = {
+        name: this.state.name,
+        ingredients: this.state.ingredients
+      }
+    }
   }
 
   clearInputs = () => {
