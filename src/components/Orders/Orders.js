@@ -11,6 +11,7 @@ const Orders = props => {
             return <li key={`${ingredient} ${Date.now()}`}>{ingredient}</li>
           })}
         </ul>
+        <button className='remove-btn'>🗑</button>
       </div>
     )
   });
