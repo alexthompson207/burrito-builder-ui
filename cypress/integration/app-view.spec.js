@@ -122,6 +122,29 @@ describe('Burrito Builder Form', () => {
     cy.get('section').children('.order').should('have.length', '4');
   });
 
+  it.only('should be able to submit order after inputing a name and more than one ingredient and view the new order on page', () => {
+    cy.intercept({
+      method: 'POST',
+      url: 'http://localhost:3001/api/v1/orders'
+    },
+      {
+        statusCode: 201,
+        body:
+          { id: 5, 'name': 'Alex', ingredients: ['beans, carnitas, lettuce'] }
+      });
+
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('input[name="name"]').type('Alex')
+    cy.get('form button').eq(0).click()
+    cy.get('form button').eq(2).click()
+    cy.get('form button').eq(4).click()
+    cy.get('form').children('p').contains('beans, carnitas, lettuce');
+    cy.get('.submit-btn').click();
+    cy.get('section').children('.order').should('have.length', '4');
+
+  });
+
   it('should not be able to submit order if user doesn\'t enter a name', () => {
     cy.intercept({
       method: 'POST',
