@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { getOrders, addOrder } from '../../apiCalls';
+import { getOrders, addOrder, removeOrder } from '../../apiCalls';
 import Orders from '../../components/Orders/Orders';
 import OrderForm from '../../components/OrderForm/OrderForm';
 
@@ -30,6 +30,19 @@ class App extends Component {
       })
   }
 
+  deleteOrder = (id) => {
+    removeOrder(id)
+      .then(order => {
+        if (order.ok) {
+          const filteredOrders = this.state.orders.filter(order => order.id !== id);
+          this.setState({ orders: filteredOrders });
+        } else {
+          this.setState({ error: 'There was an issue deleting this order' });
+        }
+
+      })
+  }
+
   render() {
     return (
       <main className="App">
@@ -38,7 +51,7 @@ class App extends Component {
           <OrderForm addOrder={this.addToOrders} />
         </header>
         {this.state.error && <h2>{this.state.error}</h2>}
-        <Orders orders={this.state.orders} />
+        <Orders orders={this.state.orders} remove={this.deleteOrder} />
       </main>
     );
   }
