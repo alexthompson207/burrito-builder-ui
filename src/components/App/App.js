@@ -8,13 +8,15 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      orders: []
+      orders: [],
+      error: ''
     }
   }
 
   componentDidMount() {
     getOrders()
-      .catch(err => console.error('Error fetching:', err));
+      .then(data => this.setState({ orders: data.orders, error: '' }))
+      .catch(err => console.error('Error fetching:', err))
   }
 
   render() {
@@ -25,7 +27,7 @@ class App extends Component {
           <OrderForm />
         </header>
 
-        <Orders orders={this.state.orders} />
+        {/* <Orders orders={this.state.orders} /> */}
       </main>
     );
   }
