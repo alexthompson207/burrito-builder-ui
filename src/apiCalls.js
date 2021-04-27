@@ -4,7 +4,7 @@ export const getOrders = () => {
 }
 
 export const addOrder = (newOrder) => {
-  return fetch('http://localhost:3001/api/v1/reservations', {
+  return fetch('http://localhost:3001/api/v1/orders', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newOrder)

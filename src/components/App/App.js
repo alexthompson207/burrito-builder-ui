@@ -20,8 +20,14 @@ class App extends Component {
   }
 
   addToOrders = (newOrder) => {
-    addOrder()
-      .then(data => console.log(data))
+    addOrder(newOrder)
+      .then(data => {
+        if (data.id) {
+          this.setState({ orders: [...this.state.orders, data] })
+        } else {
+          this.setState({ error: 'Please enter a name and at least one ingredient' })
+        }
+      })
   }
 
   render() {

@@ -27,6 +27,7 @@ class OrderForm extends Component {
         name: this.state.name,
         ingredients: this.state.ingredients
       }
+      this.props.addOrder(newOrder);
     }
   }
 
