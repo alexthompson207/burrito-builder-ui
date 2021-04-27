@@ -122,7 +122,7 @@ describe('Burrito Builder Form', () => {
     cy.get('section').children('.order').should('have.length', '4');
   });
 
-  it.only('should be able to submit order after inputing a name and more than one ingredient and view the new order on page', () => {
+  it('should be able to submit order after inputing a name and more than one ingredient and view the new order on page', () => {
     cy.intercept({
       method: 'POST',
       url: 'http://localhost:3001/api/v1/orders'
