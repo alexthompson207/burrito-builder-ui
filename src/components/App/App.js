@@ -19,12 +19,17 @@ class App extends Component {
       .catch(err => this.setState({ error: 'Oops, something went wrong' }))
   }
 
+  addToOrders = (newOrder) => {
+    addOrder()
+      .then(data => console.log(data))
+  }
+
   render() {
     return (
       <main className="App">
         <header>
           <h1>Burrito Builder</h1>
-          <OrderForm />
+          <OrderForm addOrder={this.addToOrders} />
         </header>
 
         <Orders orders={this.state.orders} />
