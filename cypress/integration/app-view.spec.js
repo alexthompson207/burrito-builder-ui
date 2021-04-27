@@ -161,6 +161,25 @@ describe('Burrito Builder Form', () => {
     cy.get('section').children('.order').should('have.length', '3');
     cy.get('input[name="name"]').should('have.value', '')
   });
+
+  it('should not be able to submit order if nothing is inputted', () => {
+    cy.intercept({
+      method: 'POST',
+      url: 'http://localhost:3001/api/v1/reservations'
+    },
+      {
+        statusCode: 201,
+        body:
+          { 'id': 4, 'name': '', ingredients: ['beans'] }
+      });
+
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('.submit-btn').click();
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('input[name="name"]').should('have.value', '')
+  });
 })
 
 describe('Burrito Builder Server Error', () => {
