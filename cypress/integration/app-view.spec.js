@@ -180,7 +180,40 @@ describe('Burrito Builder Form', () => {
     cy.get('section').children('.order').should('have.length', '3');
     cy.get('input[name="name"]').should('have.value', '')
   });
+
+  it('should be able to delete an order by clicking the trash icon', () => {
+    cy.intercept({
+      method: 'POST',
+      url: 'http://localhost:3001/api/v1/orders'
+    },
+      {
+        statusCode: 201,
+        body:
+          { id: 5, 'name': 'Alex', ingredients: ['beans'] }
+      });
+
+    cy.intercept({
+      method: 'DELETE',
+      url: 'http://localhost:3001/api/v1/orders/5'
+    },
+      {
+        statusCode: 201,
+      });
+
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('input[name="name"]').type('Alex')
+    cy.get('form button').eq(0).click()
+    cy.get('form button').eq(2).click()
+    cy.get('form').children('p').contains('beans, carnitas');
+    cy.get('.submit-btn').click();
+    cy.get('section').children('.order').should('have.length', '4');
+    cy.get('.remove-btn').eq(3).click();
+    cy.get('section').children('.order').should('have.length', '3');
+  })
+
 })
+
 
 describe('Burrito Builder Server Error', () => {
 
