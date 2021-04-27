@@ -50,7 +50,7 @@ describe('Burrito Builder Homepage Features', () => {
   });
 })
 
-describe.only('Burrito Builder Form', () => {
+describe('Burrito Builder Form', () => {
 
   beforeEach(() => {
 
@@ -162,3 +162,43 @@ describe.only('Burrito Builder Form', () => {
     cy.get('input[name="name"]').should('have.value', '')
   });
 })
+
+describe('Burrito Builder Server Error', () => {
+
+  beforeEach(() => {
+
+    cy.intercept({
+      method: 'GET',
+      url: 'http://localhost:3001/api/v1/orders'
+    },
+      {
+        statusCode: 500
+
+      });
+    cy.visit('http://localhost:3000');
+  });
+
+  it('Should display an error if the server is down', () => {
+    cy.get('h2').contains('Oops, something went wrong');
+  });
+});
+
+describe('Burrito Builder Client Error', () => {
+
+  beforeEach(() => {
+
+    cy.intercept({
+      method: 'GET',
+      url: 'http://localhost:3001/api/v1/orders'
+    },
+      {
+        statusCode: 404
+
+      });
+    cy.visit('http://localhost:3000');
+  });
+
+  it('Should display an error if there is a bad request', () => {
+    cy.get('h2').contains('Oops, something went wrong');
+  });
+});
