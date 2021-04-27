@@ -76,5 +76,89 @@ describe.only('Burrito Builder Form', () => {
     cy.get('form').children('button').should('have.length', '13');
   });
 
+  it('Should let the user know if no ingredients have been selected', () => {
+    cy.get('form').children('p').contains('Nothing selected');
+  });
 
+  it('should be able to select the name input and fill it with the corresponding value', () => {
+    cy.get('input[name="name"]')
+      .type('Alex')
+      .should('have.value', 'Alex')
+  });
+
+  it('should be able to select an ingredient option and order status should change', () => {
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('input[name="name"]').type('Alex')
+    cy.get('form button').eq(0).click()
+    cy.get('form').children('p').contains('beans');
+  });
+
+  it('should be able to select more than one ingredient options and order status should change', () => {
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('input[name="name"]').type('Alex')
+    cy.get('form button').eq(0).click()
+    cy.get('form button').eq(2).click()
+    cy.get('form button').eq(3).click()
+    cy.get('form').children('p').contains('beans, carnitas, sofritas');
+  });
+
+  it('should be able to submit order after inputing a name and at least one ingredient and view new order on page', () => {
+    cy.intercept({
+      method: 'POST',
+      url: 'http://localhost:3001/api/v1/reservations'
+    },
+      {
+        statusCode: 201,
+        body:
+          { 'id': 99, 'name': 'Alex', ingredients: ['beans'] }
+      });
+
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('input[name="name"]').type('Alex')
+    cy.get('form button').eq(0).click()
+    cy.get('form').children('p').contains('beans');
+    cy.get('.submit-btn').click();
+    cy.get('section').children('.order').should('have.length', '4');
+  });
+
+  it('should not be able to submit order if user doesn\'t enter a name', () => {
+    cy.intercept({
+      method: 'POST',
+      url: 'http://localhost:3001/api/v1/reservations'
+    },
+      {
+        statusCode: 201,
+        body:
+          { 'id': 9, 'name': 'Alex', ingredients: [''] }
+      });
+
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('form button').eq(0).click()
+    cy.get('form').children('p').contains('beans');
+    cy.get('.submit-btn').click();
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('section').children('.order').should('have.length', '3');
+  });
+
+  it('should not be able to submit order if user doesn\'t click any ingredients', () => {
+    cy.intercept({
+      method: 'POST',
+      url: 'http://localhost:3001/api/v1/reservations'
+    },
+      {
+        statusCode: 201,
+        body:
+          { 'id': 4, 'name': '', ingredients: ['beans'] }
+      });
+
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('input[name="name"]').type('Alex');
+    cy.get('.submit-btn').click();
+    cy.get('form').children('p').contains('Nothing selected');
+    cy.get('section').children('.order').should('have.length', '3');
+    cy.get('input[name="name"]').should('have.value', '')
+  });
 })
