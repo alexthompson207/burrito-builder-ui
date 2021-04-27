@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 
 class OrderForm extends Component {
   constructor(props) {
-    super();
-    this.props = props;
+    super(props);
     this.state = {
       name: '',
       ingredients: []
     };
+  }
+
+  handleNameChange = e => {
+    this.setState({ name: e.target.value })
   }
 
 
@@ -17,7 +20,7 @@ class OrderForm extends Component {
   }
 
   clearInputs = () => {
-    this.setState({name: '', ingredients: []});
+    this.setState({ name: '', ingredients: [] });
   }
 
   render() {
@@ -40,9 +43,9 @@ class OrderForm extends Component {
           onChange={e => this.handleNameChange(e)}
         />
 
-        { ingredientButtons }
+        { ingredientButtons}
 
-        <p>Order: { this.state.ingredients.join(', ') || 'Nothing selected' }</p>
+        <p>Order: {this.state.ingredients.join(', ') || 'Nothing selected'}</p>
 
         <button onClick={e => this.handleSubmit(e)}>
           Submit Order
